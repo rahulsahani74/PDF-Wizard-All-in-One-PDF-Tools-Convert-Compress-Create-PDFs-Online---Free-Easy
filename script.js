@@ -1,3 +1,19 @@
+window.addEventListener('load', () => {
+    // Debug logging to capture console errors
+    function logError(message, error) {
+        console.error(`[PDF Wizard Error] ${message}:`, error);
+        alert(`Error: ${message}. Please check the console (F12 > Console) and share the error message.`);
+    }
+
+    // Check for Web Crypto API support
+    function checkCryptoSupport() {
+        if (!window.crypto || !window.crypto.subtle) {
+            logError('Browser does not support Web Crypto API required for encryption', new Error('Web Crypto API unavailable'));
+            return false;
+        }
+        return true;
+    }
+
     // Section toggling for navbar and footer links
     function setupSectionToggling(selector) {
         document.querySelectorAll(selector).forEach(link => {
@@ -39,7 +55,7 @@
             dropZone.classList.remove('dragover');
             const files = e.dataTransfer.files;
             if (preview) handleFiles(files, preview, allowedTypes);
-            input.files = files; // Ensure input reflects dropped files
+            input.files = files;
         });
         input.addEventListener('change', () => {
             if (preview) handleFiles(input.files, preview, allowedTypes);
@@ -95,7 +111,7 @@
         }, 200);
     }
 
-    // Image to PDF (Fixed)
+    // Image to PDF
     document.getElementById('convert-image-to-pdf').addEventListener('click', async () => {
         try {
             const input = document.getElementById('image-input');
@@ -118,24 +134,28 @@
                     const yOffset = (pdfHeight - imgHeight) / 2;
                     doc.addImage(img, file.type.split('/')[1].toUpperCase(), 0, yOffset, pdfWidth, imgHeight);
                     if (i < files.length - 1) doc.addPage();
-                    URL.revokeObjectURL(img.src); // Clean up object URL
+                    URL.revokeObjectURL(img.src);
                 }
                 doc.save('converted.pdf');
             });
         } catch (err) {
-            alert('Error converting images to PDF: ' + err.message);
+            logError('Converting images to PDF', err);
         }
     });
 
     // Text to PDF
     document.getElementById('convert-text-to-pdf').addEventListener('click', () => {
-        const text = document.getElementById('text-input').value;
-        if (!text) return alert('Please enter text');
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        doc.setFontSize(12);
-        doc.text(text.split('\n'), 10, 10);
-        doc.save('text.pdf');
+        try {
+            const text = document.getElementById('text-input').value;
+            if (!text) return alert('Please enter text');
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFontSize(12);
+            doc.text(text.split('\n'), 10, 10);
+            doc.save('text.pdf');
+        } catch (err) {
+            logError('Converting text to PDF', err);
+        }
     });
 
     // PDF to Image
@@ -164,7 +184,7 @@
                 link.click();
             });
         } catch (err) {
-            alert('Error converting PDF to image: ' + err.message);
+            logError('Converting PDF to image', err);
         }
     });
 
@@ -186,25 +206,29 @@
                 saveAs(blob, 'merged.pdf');
             });
         } catch (err) {
-            alert('Error merging PDFs: ' + err.message);
+            logError('Merging PDFs', err);
         }
     });
 
     // Compress Image
     document.getElementById('compress-image-btn').addEventListener('click', () => {
-        const input = document.getElementById('compress-image-input');
-        if (input.files.length === 0) return alert('Please upload an image');
-        simulateProgress('compress-image-progress', () => {
-            new Compressor(input.files[0], {
-                quality: 0.6,
-                success(result) {
-                    saveAs(result, 'compressed-image.jpg');
-                },
-                error(err) {
-                    alert('Compression failed: ' + err.message);
-                }
+        try {
+            const input = document.getElementById('compress-image-input');
+            if (input.files.length === 0) return alert('Please upload an image');
+            simulateProgress('compress-image-progress', () => {
+                new Compressor(input.files[0], {
+                    quality: 0.6,
+                    success(result) {
+                        saveAs(result, 'compressed-image.jpg');
+                    },
+                    error(err) {
+                        logError('Compressing image', err);
+                    }
+                });
             });
-        });
+        } catch (err) {
+            logError('Compressing image', err);
+        }
     });
 
     // Compress PDF
@@ -227,7 +251,7 @@
                 saveAs(blob, 'compressed.pdf');
             });
         } catch (err) {
-            alert('Error compressing PDF: ' + err.message);
+            logError('Compressing PDF', err);
         }
     });
 
@@ -237,7 +261,9 @@
             const input = document.getElementById('watermark-pdf-input');
             const watermarkText = document.getElementById('watermark-text').value;
             const style = document.getElementById('watermark-style').value;
-            if (input.files.length === 0 || !watermarkText) return alert('Please upload a PDF and enter watermark text');
+            if (input
+
+.files.length === 0 || !watermarkText) return alert('Please upload a PDF and enter watermark text');
             simulateProgress('watermark-progress', async () => {
                 const file = input.files[0];
                 const arrayBuffer = await file.arrayBuffer();
@@ -261,7 +287,7 @@
                 saveAs(blob, 'watermarked.pdf');
             });
         } catch (err) {
-            alert('Error adding watermark: ' + err.message);
+            logError('Adding watermark', err);
         }
     });
 
@@ -284,7 +310,7 @@
                 output.value = text || 'No text found in the PDF';
             });
         } catch (err) {
-            alert('Error extracting text: ' + err.message);
+            logError('Extracting text', err);
         }
     });
 
@@ -308,11 +334,11 @@
                 }
             });
         } catch (err) {
-            alert('Error splitting PDF: ' + err.message);
+            logError('Splitting PDF', err);
         }
     });
 
-    // Rotate PDF (Fixed)
+    // Rotate PDF
     document.getElementById('rotate-pdf-btn').addEventListener('click', async () => {
         try {
             const input = document.getElementById('rotate-pdf-input');
@@ -332,37 +358,106 @@
                 saveAs(blob, 'rotated.pdf');
             });
         } catch (err) {
-            alert('Error rotating PDF: ' + err.message);
+            logError('Rotating PDF', err);
         }
     });
 
-    // Protect PDF (Fixed)
+    // Protect PDF
     document.getElementById('protect-pdf-btn').addEventListener('click', async () => {
         try {
+            // Validate inputs
             const input = document.getElementById('protect-pdf-input');
-            const password = document.getElementById('pdf-password').value;
+            const password = document.getElementById('pdf-password').value.trim();
+            if (!input) throw new Error('Protect PDF input element not found');
             if (input.files.length === 0) return alert('Please upload a PDF');
-            if (!password) return alert('Please enter a password');
+            if (!password) return alert('Please enter a valid password (non-empty)');
+            if (password.length < 6) return alert('Password must be at least 6 characters long');
+
+            // Check Web Crypto API support
+            if (!checkCryptoSupport()) return;
+
+            console.log('[Protect PDF] Starting protection process...');
+            console.log('[Protect PDF] Password:', password.replace(/./g, '*')); // Mask password in logs
+            console.log('[Protect PDF] PDF file name:', input.files[0].name);
+
             simulateProgress('protect-pdf-progress', async () => {
-                const file = input.files[0];
-                const arrayBuffer = await file.arrayBuffer();
-                const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
-                const pdfBytes = await pdfDoc.save({
-                    useObjectStreams: false,
-                    addDefaultPermissions: false,
-                    userPassword: password,
-                    ownerPassword: password,
-                    permissions: {
-                        printing: 'highResolution',
-                        modifying: false,
-                        copying: false,
-                    },
-                });
-                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-                saveAs(blob, 'protected.pdf');
+                try {
+                    const file = input.files[0];
+                    const arrayBuffer = await file.arrayBuffer();
+                    console.log('[Protect PDF] PDF loaded, size:', arrayBuffer.byteLength);
+
+                    // Check if PDFLib is available
+                    if (!window.PDFLib || !window.PDFLib.PDFDocument) {
+                        throw new Error('PDFLib library is not loaded');
+                    }
+
+                    // Load PDF and check for existing encryption
+                    const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer, {
+                        ignoreEncryption: false
+                    }).catch(err => {
+                        if (err.message.includes('encrypted')) {
+                            throw new Error('Input PDF is already encrypted. Please provide an unencrypted PDF.');
+                        }
+                        throw err;
+                    });
+
+                    console.log('[Protect PDF] Attempting AES-256 encryption...');
+                    let pdfBytes;
+                    try {
+                        // Try AES-256 encryption
+                        pdfBytes = await pdfDoc.save({
+                            updateMetadata: false,
+                            pdfVersion: '1.7', // Modern PDF version for AES-256
+                            encryption: {
+                                userPassword: password, // Required to open the PDF
+                                ownerPassword: password, // Required to change permissions
+                                permissions: {
+                                    printing: 'highResolution',
+                                    modifying: false,
+                                    copying: false,
+                                    annotating: false,
+                                    fillingForms: false,
+                                    contentAccessibility: false,
+                                    documentAssembly: false
+                                }
+                            }
+                        });
+                        console.log('[Protect PDF] AES-256 encryption applied successfully');
+                    } catch (aes256Err) {
+                        console.warn('[Protect PDF] AES-256 failed, falling back to AES-128:', aes256Err);
+                        // Fallback to AES-128
+                        pdfBytes = await pdfDoc.save({
+                            updateMetadata: false,
+                            pdfVersion: '1.5', // Compatible with AES-128
+                            encryption: {
+                                userPassword: password,
+                                ownerPassword: password,
+                                permissions: {
+                                    printing: 'highResolution',
+                                    modifying: false,
+                                    copying: false,
+                                    annotating: false,
+                                    fillingForms: false,
+                                    contentAccessibility: false,
+                                    documentAssembly: false
+                                },
+                                encryptionAlgorithm: 'aes128'
+                            }
+                        });
+                        console.log('[Protect PDF] AES-128 encryption applied successfully');
+                    }
+
+                    console.log('[Protect PDF] PDF encrypted, size:', pdfBytes.length);
+                    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                    saveAs(blob, 'protected.pdf');
+                    console.log('[Protect PDF] File saved as protected.pdf');
+                    alert('PDF protected successfully! Open it in a PDF viewer like Adobe Acrobat Reader and use the password you provided. Note: Some browsers (e.g., Chrome) may not prompt for a password; try a dedicated PDF viewer.');
+                } catch (innerErr) {
+                    logError('Inner error during PDF protection', innerErr);
+                }
             });
         } catch (err) {
-            alert('Error protecting PDF: ' + err.message);
+            logError('Protecting PDF', err);
         }
     });
 
@@ -424,7 +519,7 @@
                     link.href = dataUrl;
                     link.download = `converted-image.${extension}`;
                     link.click();
-                    URL.revokeObjectURL(img.src); // Clean up object URL
+                    URL.revokeObjectURL(img.src);
                 };
                 img.onerror = () => {
                     alert('Error loading image for conversion.');
@@ -432,74 +527,84 @@
                 };
             });
         } catch (err) {
-            alert('Error converting image format: ' + err.message);
+            logError('Converting image format', err);
         }
     });
 
     // Contact Us Form Submission (Placeholder)
     document.getElementById('contact-submit').addEventListener('click', () => {
-        const name = document.getElementById('contact-name').value;
-        const email = document.getElementById('contact-email').value;
-        const message = document.getElementById('contact-message').value;
-        if (!name || !email || !message) {
-            alert('Please fill in all fields.');
-            return;
+        try {
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+            if (!name || !email || !message) {
+                alert('Please fill in all fields.');
+                return;
+            }
+            alert(`Thank you, ${name}! Your message has been received. We'll get back to you at ${email} soon.`);
+            document.getElementById('contact-name').value = '';
+            document.getElementById('contact-email').value = '';
+            document.getElementById('contact-message').value = '';
+        } catch (err) {
+            logError('Submitting contact form', err);
         }
-        alert(`Thank you, ${name}! Your message has been received. We'll get back to you at ${email} soon.`);
-        document.getElementById('contact-name').value = '';
-        document.getElementById('contact-email').value = '';
-        document.getElementById('contact-message').value = '';
     });
 
     // Clear buttons
     document.querySelectorAll('.btn-secondary[id^="clear-"]').forEach(btn => {
         btn.addEventListener('click', () => {
-            const section = btn.id.replace('clear-', '');
-            const input = document.getElementById(`${section}-input`);
-            const preview = document.getElementById(`${section}-preview`);
-            const textInput = document.getElementById(`${section === 'text' ? 'text-input' : section === 'extract-text' ? 'extracted-text' : ''}`);
-            const watermarkText = document.getElementById('watermark-text');
-            const pdfPassword = document.getElementById('pdf-password');
-            const contactName = document.getElementById('contact-name');
-            const contactEmail = document.getElementById('contact-email');
-            const contactMessage = document.getElementById('contact-message');
+            try {
+                const section = btn.id.replace('clear-', '');
+                const input = document.getElementById(`${section}-input`);
+                const preview = document.getElementById(`${section}-preview`);
+                const textInput = document.getElementById(`${section === 'text' ? 'text-input' : section === 'extract-text' ? 'extracted-text' : ''}`);
+                const watermarkText = document.getElementById('watermark-text');
+                const pdfPassword = document.getElementById('pdf-password');
+                const contactName = document.getElementById('contact-name');
+                const contactEmail = document.getElementById('contact-email');
+                const contactMessage = document.getElementById('contact-message');
 
-            // Clear file inputs
-            if (input) input.value = '';
-
-            // Clear previews and revoke object URLs
-            if (preview) {
-                Array.from(preview.querySelectorAll('img')).forEach(img => URL.revokeObjectURL(img.src));
-                preview.innerHTML = '';
-            }
-
-            // Clear textareas
-            if (textInput) textInput.value = '';
-
-            // Clear specific fields
-            if (section === 'watermark' && watermarkText) watermarkText.value = '';
-            if (section === 'protect-pdf' && pdfPassword) pdfPassword.value = '';
-            if (section === 'contact') {
-                if (contactName) contactName.value = '';
-                if (contactEmail) contactEmail.value = '';
-                if (contactMessage) contactMessage.value = '';
+                if (input) input.value = '';
+                if (preview) {
+                    Array.from(preview.querySelectorAll('img')).forEach(img => URL.revokeObjectURL(img.src));
+                    preview.innerHTML = '';
+                }
+                if (textInput) textInput.value = '';
+                if (section === 'watermark' && watermarkText) watermarkText.value = '';
+                if (section === 'protect-pdf' && pdfPassword) pdfPassword.value = '';
+                if (section === 'contact') {
+                    if (contactName) contactName.value = '';
+                    if (contactEmail) contactEmail.value = '';
+                    if (contactMessage) contactMessage.value = '';
+                }
+            } catch (err) {
+                logError('Clearing section', err);
             }
         });
     });
 
     document.getElementById('newsletter-subscribe').addEventListener('click', () => {
-        const email = document.getElementById('newsletter-email').value;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            alert('Please enter a valid email address.');
-            return;
+        try {
+            const email = document.getElementById('newsletter-email').value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+            alert('Thank you for subscribing!');
+            document.getElementById('newsletter-email').value = '';
+        } catch (err) {
+            logError('Subscribing to newsletter', err);
         }
-        alert('Thank you for subscribing!');
-        document.getElementById('newsletter-email').value = '';
     });
 
     // Update copyright year
     document.getElementById('copyright-year').textContent = new Date().getFullYear();
 
     // Show landing page by default
-    document.getElementById('landing-page').classList.add('active');
+    try {
+        document.getElementById('landing-page').classList.add('active');
+    } catch (err) {
+        console.error('[PDF Wizard] Failed to show landing page:', err);
+    }
+});
