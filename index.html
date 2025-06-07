@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Wizard All-in-One PDF Tools | Convert, Compress, Create PDFs Online - Free & Easy</title>
+    <meta name="description" content="Free online PDF tools to convert images to PDF, text to PDF, and compress images. Fast, secure & mobile-friendly tool by Rahul Sahani. No signup needed.">
+    <meta name="keywords" content="PDF Maker, Image to PDF, Text to PDF, Compress Image, Free PDF Tools, Online PDF Converter, PDF Tools India, Rahul Sahani">
+    <meta name="author" content="Rahul Sahani">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="robots" content="index, follow">
+
+    <!-- OpenGraph for Social Media Sharing -->
+    <meta property="og:title" content="All-in-One PDF Tools by Rahul Sahani">
+    <meta property="og:description" content="Convert & create PDFs, compress images – all in one free online tool. No signup, mobile-friendly.">
+    <meta property="og:image" content="https://yourdomain.com/preview.png"> <!-- change to your preview image -->
+    <meta property="og:url" content="https://yourdomain.com"> <!-- change to your live site URL -->
+    <meta property="og:type" content="website">
+
+    <!-- Favicon -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- SEO Tagline (visible to users if you want) -->
+    <!-- You can also put this in your footer or header body -->
+    <!-- <p class="text-center text-muted small">Your Ultimate Free PDF Converter & File Tool – Simple, Fast & Safe | By Rahul Sahani</p> -->
+
+    <!-- Disable right-click and block inspect tools (basic protection) -->
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+        if (
+            e.keyCode == 123 || // F12
+            (e.ctrlKey && e.shiftKey && ['I', 'C', 'J'].includes(e.key.toUpperCase())) || // Ctrl+Shift+I/C/J
+            (e.ctrlKey && e.key.toUpperCase() === 'U') // Ctrl+U
+        ) {
+            return false;
+        }
+        };
+    </script>
+    <link rel="icon" type="image/x-icon" href="pdf.png.png">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+            position: relative;
+            overflow-x: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+        main {
+            flex: 1 0 auto;
+        }
+        /* Page fold animation */
+        .page-fold {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .page {
+            position: absolute;
+            width: 100px;
+            height: 140px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            animation: fold 6s infinite ease-in-out;
+            transform-origin: center;
+        }
+        .page:nth-child(1) { top: 15%; left: 8%; animation-delay: 0s; }
+        .page:nth-child(2) { top: 35%; right: 12%; animation-delay: 1.5s; }
+        .page:nth-child(3) { bottom: 25%; left: 18%; animation-delay: 3s; }
+        @keyframes fold {
+            0%, 100% { transform: scaleX(1) rotate(0deg); }
+            25% { transform: scaleX(0.5) rotate(5deg); }
+            50% { transform: scaleX(1) rotate(-5deg); }
+            75% { transform: scaleX(0.5) rotate(5deg); }
+        }
+        .navbar {
+            background: #ffffff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .nav-link {
+            color: #333;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .nav-link:hover {
+            color: #007bff;
+        }
+        .section {
+            display: none;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 15px;
+            margin: 15px auto;
+            max-width: 90%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .section.active {
+            display: block;
+            animation: slideDown 0.5s ease-in-out;
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .drop-zone {
+            border: 2px dashed #007bff;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            transition: background 0.3s;
+            font-size: 0.9rem;
+        }
+        .drop-zone.dragover {
+            background: #e9f5ff;
+        }
+        .preview img {
+            max-width: 100%;
+            max-height: 150px;
+            margin: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .preview span {
+            display: block;
+            margin: 5px 0;
+            color: #333;
+        }
+        textarea, input[type="text"], input[type="email"], input[type="password"], select {
+            font-size: 0.9rem;
+        }
+        .btn-primary {
+            background: #007bff;
+            border: none;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+        .btn-fun {
+            background: #ff6f61;
+            color: white;
+            font-size: 0.9rem;
+        }
+        .btn-fun:hover {
+            background: #e65b50;
+        }
+        .btn-secondary {
+            font-size: 0.9rem;
+        }
+        .progress {
+            height: 8px;
+            margin-top: 10px;
+        }
+        /* Landing Page Styles */
+        .landing-section {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .landing-section h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        .landing-section p {
+            color: #555;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+        .landing-section .btn-primary {
+            font-size: 1rem;
+            padding: 10px 20px;
+        }
+        .feature-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        /* Footer Styles */
+                footer {
+            flex-shrink: 0;
+            background: #ffffff;
+            padding: 20px 0;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+        footer .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #333;
+        }
+        footer .social-links a, footer .footer-links a {
+            color: #007bff;
+            margin: 0 10px;
+            font-size: 1.3rem;
+            transition: transform 0.3s, color 0.3s;
+            text-decoration: none;
+        }
+        footer .social-links a:hover {
+            color: #ff6f61;
+            transform: scale(1.2);
+        }
+        footer .footer-links a {
+            font-size: 1rem;
+        }
+        footer .footer-links a:hover {
+            color: #ff6f61;
+        }
+        footer .newsletter-form {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        footer .newsletter-form input {
+            max-width: 200px;
+        }
+        @media (max-width: 768px) {
+            .navbar-brand, .nav-link {
+                font-size: 0.8rem;
+            }
+            .section {
+                padding: 15px;
+                margin: 10px auto;
+            }
+            .drop-zone, textarea, input, select, .btn {
+                font-size: 0.8rem;
+            }
+            footer .footer-container {
+                grid-template-columns: 1fr;
+            }
+            footer p, footer .social-links a, footer .footer-links a {
+                font-size: 0.8rem;
+            }
+            .landing-section h1 {
+                font-size: 2rem;
+            }
+            .landing-section p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page fold animation -->
+    <div class="page-fold">
+        <div class="page"></div>
+        <div class="page"></div>
+        <div class="page"></div>
+    </div>
+
+    <main>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="#" data-section="landing-page">PDF Wizard <i class="fas fa-file-pdf"></i></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="image-to-pdf">Image to PDF</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="text-to-pdf">Text to PDF</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="pdf-to-image">PDF to Image</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="merge-pdf">Merge PDFs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="compress-image">Compress Image</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="compress-pdf">Compress PDF</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="add-watermark">Add Watermark</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="extract-text">Extract Text</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="split-pdf">Split PDF</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="rotate-pdf">Rotate PDF</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="protect-pdf">Protect PDF</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="image-format-converter">Image Converter</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="about-me">About Me</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="contact-us">Contact Us</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Sections -->
+        <div class="container">
+            <!-- Landing Page -->
+            <div id="landing-page" class="section">
+                <div class="landing-section">
+                    <h1>Welcome to PDF Wizard</h1>
+                    <p>Your one-stop solution for all PDF and image conversion needs. Convert, compress, merge, and more with ease!</p>
+                    <button class="btn btn-primary" id="get-started-btn">Get Started</button>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="feature-card">
+                            <h4><i class="fas fa-user"></i> About Me</h4>
+                            <p>I'm the creator of PDF Wizard, passionate about simplifying document tasks. <a href="#" data-section="about-me">Learn more</a></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="feature-card">
+                            <h4><i class="fas fa-envelope"></i> Contact Us</h4>
+                            <p>Have questions or feedback? Reach out to me! <a href="#" data-section="contact-us">Contact now</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image to PDF -->
+            <div id="image-to-pdf" class="section">
+                <h3><i class="fas fa-image"></i> Image to PDF</h3>
+                <div class="drop-zone" id="drop-zone-image">
+                    Drag & Drop Images or Click to Upload
+                    <input type="file" accept="image/*" multiple hidden id="image-input">
+                </div>
+                <div class="preview" id="image-preview"></div>
+                <div class="progress" id="image-progress" style="display: none;">
+                    <div class="progress-bar" style="width: 0%;"></div>
+                </div>
+                <button class="btn btn-primary" id="convert-image-to-pdf">Convert to PDF</button>
+                <button class="btn btn-secondary" id="clear-image">Clear</button>
+            </div>
+
+            <!-- Text to PDF -->
+            <div id="text-to-pdf" class="section">
+                <h3><i class="fas fa-text-height"></i> Text to PDF</h3>
+                <textarea class="form-control" id="text-input" rows="5" placeholder="Enter text or paste document content"></textarea>
+                <div class="mt-3">
+                    <button class="btn btn-primary" id="convert-text-to-pdf">Convert to PDF</button>
+                    <button class="btn btn-secondary" id="clear-text">Clear</button>
+                </div>
+            </div>
+
+            <!-- PDF to Image -->
+            <div id="pdf-to-image" class="section">
+                <h3><i class="fas fa-file-image"></i> PDF to Image</h3>
+                <div class="drop-zone" id="drop-zone-pdf-to-image">
+                    Drag & Drop PDF or Click to Upload
+                    <input type="file" accept=".pdf" hidden id="pdf-to-image-input">
+                </div>
+                <div class="preview" id="pdf-to-image-preview"></div>
+                <div class="progress" id="pdf-to-image-progress" style="display: none;">
+                    <div class="progress-bar" style="width: 0%;"></div>
+                </div>
+                <button class="btn btn-primary" id="convert-pdf-to-image">Convert to Image</button>
+                <button class="btn btn-secondary" id="clear-pdf-to-image">Clear</button>
+            </div>
+
+            <!-- Merge PDFs -->
+            <div id="merge-pdf" class="section">
+                <h3><i class="fas fa-file-import"></i> Merge PDFs</h3>
+                <div class="drop-zone" id="drop-zone-merge-pdf">
+                    Drag & Drop PDFs or Click to Upload
+                    <input type="file" accept=".pdf" multiple hidden id="merge-pdf-input">
+                </div>
+                <div class="preview" id="merge-pdf-preview"></div>
+                <div class="progress" id="merge-pdf-progress" style="display: none;">
+                    <div class="progress-bar" style="width: 0%;"></div>
+                </div>
+                <button class="btn btn-primary" id="merge-pdf-btn">Merge PDFs</button>
+                <button class="btn btn-secondary" id="clear-merge-pdf">Clear</button>
+            </div>
+
+            <!-- Compress Image -->
+            <div id="compress-image" class="section">
+                <h3><i class="fas fa-compress"></i> Compress Image</h3>
+                <div class="drop-zone" id="drop-zone-compress-image">
+                    Drag & Drop Image or Click to Upload
+                    <input type="file" accept="image/*" hidden id="compress-image-input">
+                </div>
+                <div class="preview" id="compress-image-preview"></div>
+                <div class="progress" id="compress-image-progress" style="display: none;">
+                    <div class="progress-bar" style="width: 0%;"></div>
+                </div>
+                <button class="btn btn-primary" id="compress-image-btn">Compress Image</button>
+                <button class="btn btn-secondary" id="clear-compress-image">Clear</button>
+            </div>
+
+            <!-- Compress PDF -->
+            <div id="compress-pdf" class="section">
+                <h3><i class="fas fa-file-pdf"></i> Compress PDF</h3>
+                <div class="drop-zone" id="drop-zone-compress-pdf">
+                    Drag & Drop PDF or Click to Upload
+                    <input type="file" accept=".pdf" hidden id="compress-pdf-input">
+                </div>
+                <div class="preview" id="compress-pdf-preview"></div>
+                <div class="progress" id="compress-pdf-progress" style="display: none;">
+                    <div class="progress-bar" style="width: 0%;"></div>
+                </div>
+                <button class="btn btn-primary" id="compress-pdf-btn">Compress PDF</button>
+                <button class="btn btn-secondary" id="clear-compress-pdf">Clear</button>
+            </div>
+
+            <!-- Add Watermark -->
+            <div id="add-watermark" class="section">
+                <h3><i class="fas fa-stamp"></i> Add Watermark</h3>
+                <div class="drop-zone" id="drop-zone-watermark-pdf">
+                    Drag & Drop PDF or Click to Upload
+                    <input type="file" accept=".pdf" hidden id="watermark-pdf-input">
+                </div>
+                <input type="text" class="form-control mb-3" id="watermark-text" placeholder="Enter watermark text (e.g., CONFIDENTIAL)">
+                <select class="form-control mb-3" id="watermark-style">
+                    <option value="normal">Normal</option>
+                    <option value="fancy">Fancy (Comic Style)</option>
+                    <option value="elegant">Elegant (Cursive)</option>
+                </select>
+                <div class="progress" id="watermark-progress" style="display: none;">
+                    <div class="progress-bar" style="width: 0%;"></div>
+                </div>
+                <button class="btn btn-fun" id="add-watermark-btn">Add Watermark</button>
+                <button class="btn btn-secondary" id="clear-watermark">Clear</button>
+            </div>
+
+            <!-- Extract Text from PDF -->
+            <div id="extract-text" class="section">
+                <h3><i class="fas fa-file-alt"></i> Extract Text</h3>
+                <div class="drop-zone" id="drop-zone-extract-text">
+                    Drag & Drop PDF or Click to Upload
+                    <input type="file" accept=".pdf" hidden id="extract-text-input">
+                </div>
+                <textarea class="form-control mt-3" id="extracted-text" rows="5" readonly placeholder="Extracted text will appear here"></textarea>
+                <div class="progress" id="extract-text-progress" style="display: none;">
+                    <div class="progress-bar" style="width: 0%;"></div>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-primary" id="extract-text-btn">Extract Text</button>
+                    <button class="btn btn-secondary" id="clear-extract-text">Clear</button>
+                </div>
+            </div>
+
+            <!-- Split PDF -->
+            <div id="split-pdf" class="section">
+                <h3><i class="fas fa-cut"></i> Split PDF</h3>
+                <div class="drop-zone" id="drop-zone-split-pdf">
+                    Drag & Drop PDF or Click to Upload
+                    <input type="file" accept=".pdf" hidden id="split-pdf-input">
+                </div>
+                <div class="preview" id="split-pdf-preview"></div>
+                <div class="progress" id="split-pdf-progress" style="display: none;">
+                    <div class="progress-bar" style="width: 0%;"></div>
+                </div>
+                <button class="btn btn-primary" id="split-pdf-btn">Split PDF</button>
+                <button class="btn btn-secondary" id="clear-split-pdf">Clear</button>
+            </div>
+
+            <!-- Rotate PDF -->
+            <div id="rotate-pdf" class="section">
+                <h3><i class="fas fa-redo"></i> Rotate PDF</h3>
+                <div class="drop-zone" id="drop-zone-rotate-pdf">
+                    Drag & Drop PDF or Click to Upload
+                    <input type="file" accept=".pdf" hidden id="rotate-pdf-input">
+                </div>
+                <select id="rotate-degree" class="form-select mt-3">
+                    <option value="90">90°</option>
+                    <option value="180">180°</option>
+                    <option value="270">270°</option>
+                </select>
+                <div class="preview" id="rotate-pdf-preview"></div>
+                <div class="progress" id="rotate-pdf-progress" style="display: none;">
+                    <div class="progress-bar" style="width: 0%;"></div>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-primary" id="rotate-pdf-btn">Rotate PDF</button>
+                    <button class="btn btn-secondary" id="clear-rotate-pdf">Clear</button>
+                </div>
+            </div>
+
+            <!-- Protect PDF -->
+            <div id="protect-pdf" class="section">
+                <h3><i class="fas fa-lock"></i> Protect PDF</h3>
+                <div class="drop-zone" id="drop-zone-protect-pdf">
+                    Drag & Drop PDF or Click to Upload
+                    <input type="file" accept=".pdf" hidden id="protect-pdf-input">
+                </div>
+                <input type="password" id="pdf-password" class="form-control mt-3" placeholder="Enter password">
+                <div class="preview" id="protect-pdf-preview"></div>
+                <div class="progress" id="protect-pdf-progress" style="display: none;">
+                    <div class="progress-bar" style="width: 0%;"></div>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-primary" id="protect-pdf-btn">Protect PDF</button>
+                    <button class="btn btn-secondary" id="clear-protect-pdf">Clear</button>
+                </div>
+            </div>
+
+            <!-- Image Format Converter -->
+            <div id="image-format-converter" class="section">
+                <h3><i class="fas fa-image"></i> Image Format Converter</h3>
+                <div class="drop-zone" id="drop-zone-image-format">
+                    Drag & Drop Image or Click to Upload
+                    <input type="file" accept="image/*" hidden id="image-format-input">
+                </div>
+                <select id="image-format-type" class="form-select mt-3">
+                    <option value="jpeg">JPEG</option>
+                    <option value="png">PNG</option>
+                    <option value="webp">WEBP (if supported by browser)</option>
+                    <option value="gif">GIF (will be saved as PNG)</option>
+                    <option value="bmp">BMP (will be saved as PNG)</option>
+                    <option value="tiff">TIFF (will be saved as PNG)</option>
+                </select>
+                <div class="preview" id="image-format-preview"></div>
+                <div class="progress" id="image-format-progress" style="display: none;">
+                    <div class="progress-bar" style="width: 0%;"></div>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-primary" id="convert-image-format-btn">Convert Image</button>
+                    <button class="btn btn-secondary" id="clear-image-format">Clear</button>
+                </div>
+            </div>
+
+            <!-- About Me -->
+            <div id="about-me" class="section">
+                <h3><i class="fas fa-user"></i> About Me</h3>
+                <p>
+                    Hello! I’m Rahul Sahani, the creator of PDF Wizard, a tool designed to simplify your document and image conversion tasks. As a web developer with over 2 years of experience in web development, I’ve always been passionate about creating user-friendly applications that solve real-world problems.
+                </p>
+                <p>
+                    The idea for PDF Wizard came to me while working on a project that required frequent PDF conversions and manipulations. I noticed how time-consuming and frustrating it could be to find reliable tools for these tasks. That’s when I decided to build PDF Wizard—a one-stop solution for converting, compressing, merging, and editing PDFs and images with ease.
+                </p>
+                <p>
+                    My goal with PDF Wizard is to empower users, whether they’re students, professionals, or casual users, to handle their documents efficiently without the hassle. I’m constantly working on adding new features and improving the app based on user feedback, so feel free to share your thoughts via the Contact Us page!
+                </p>
+                <p>
+                    When I’m not coding, you can find me exploring new technologies, reading tech blogs, or enjoying a good cup of coffee. Thanks for using PDF Wizard—I hope it makes your life a little easier!
+                </p>
+            </div>
+
+            <!-- Contact Us -->
+            <div id="contact-us" class="section">
+                <h3><i class="fas fa-envelope"></i> Contact Us</h3>
+                <div>
+                    <div class="mb-3">
+                        <label for="contact-name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="contact-name" placeholder="Enter your name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="contact-email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="contact-email" placeholder="Enter your email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="contact-message" class="form-label">Message</label>
+                        <textarea class="form-control" id="contact-message" rows="5" placeholder="Enter your message"></textarea>
+                    </div>
+                    <button class="btn btn-primary" id="contact-submit">Submit</button>
+                    <button class="btn btn-secondary" id="clear-contact">Clear</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-container">
+            <div>
+                <h5>Connect with Us</h5>
+                <div class="social-links">
+                    <a href="#" title="Twitter" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="Facebook" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" title="Instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" title="LinkedIn" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div>
+                <h5>Quick Links</h5>
+                <div class="footer-links">
+                    <a href="#" data-section="about-me">About Me</a>
+                    <a href="#" data-section="contact-us">Contact Us</a>
+                </div>
+            </div>
+            <div>
+                <h5>Newsletter</h5>
+                <div class="newsletter-form">
+                    <input type="email" class="form-control" id="newsletter-email" placeholder="Enter your email" aria-label="Newsletter email">
+                    <button class="btn btn-primary" id="newsletter-subscribe">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        <p class="mt-3">© <span id="copyright-year"></span> PDF Wizard. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/compressorjs@1.2.1/dist/compressor.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <!-- Font Awesome for Footer Icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="script.js"></script> 
+</body>
+</html>
